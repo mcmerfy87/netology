@@ -1,0 +1,147 @@
+################################################################################
+### Localization
+################################################################################
+
+d-i debian-installer/locale string ru_RU.UTF-8   
+d-i debian-installer/language string ru
+d-i debian-installer/country string RU
+d-i localechooser/supported-locales ru_RU.UTF-8
+d-i localechooser/supported-locales multiselect en_US.UTF-8, ru_RU.UTF-8
+################################################################################
+### Keyboard
+################################################################################
+d-i localechooser/shortlist select  RU
+d-i console-setup/ask_detect boolean false
+d-i console-setup/layoutcode string ru
+d-i console-setup/variant select  Россия
+d-i console-setup/toggle  select  Alt+Shift
+
+################################################################################
+### Network configuration
+################################################################################
+
+d-i netcfg/choose_interface select auto
+d-i netcfg/wireless_wep string
+d-i netcfg/get_hostname string PRESEED
+d-i netcfg/get_domain string lan
+
+################################################################################
+### Mirror settings
+################################################################################
+
+d-i mirror/country string manual
+d-i mirror/http/hostname string mirror.mephi.ru
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+d-i mirror/http/mirror select mirror.mephi.ru
+
+################################################################################
+### Clock and time zone setup
+################################################################################
+
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Moscow
+d-i clock-setup/ntp boolean true
+
+################################################################################
+### Partitioning
+################################################################################
+
+#d-i preseed/early_command string umount /media || true
+#d-i partman/unmount_active boolean true
+d-i partman-auto/disk string /dev/sda
+d-i partman-auto/method string regular
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/device_remove_lvm_span boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-auto/purge_lvm_from_device boolean true
+d-i partman-auto-lvm/guided_size string max
+d-i partman-auto-lvm/new_vg_name string workstation
+d-i partman-auto/choose_recipe select atomic
+d-i partman/default_filesystem string ext4
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman-md/confirm boolean true
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+################################################################################
+### Base system installation
+################################################################################
+
+#d-i base-installer/kernel/skip-install boolean true
+#d-i base-installer/kernel/image string linux-generic
+
+################################################################################
+### Account setup
+################################################################################
+
+##root login
+d-i passwd/root-login boolean true
+d-i passwd/root-password-crypted password $1$2gHsJug0$EuoHbJqIwGlfIj6.GukVZ.
+d-i passwd/user-fullname string pas
+d-i passwd/username string pas
+d-i passwd/user-password-crypted password $1$jHTUnGM7$c9aJiW78SdQCyhN5nG0pg1
+d-i user-setup/allow-password-weak boolean true
+d-i passwd/user-default-groups string sudo
+d-i user-setup/encrypt-home boolean false
+
+################################################################################
+### Apt setup
+################################################################################
+
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+
+################################################################################
+### Package selection
+################################################################################
+tasksel tasksel/first multiselect minimal
+d-i pkgsel/include string openssh-server sudo python 
+d-i base-installer/install-recommends boolean false
+d-i popularity-contest/participate boolean false
+d-i pkgsel/upgrade select none
+popularity-contest popularity-contest/participate boolean false
+d-i apt-setup/security-updates boolean true
+###
+d-i pkgsel/language-packs multiselect ru, en
+d-i pkgsel/update-policy select unattended-upgrades 
+
+################################################################################
+### Boot loader installation
+################################################################################
+
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i grub-installer/bootdev string /dev/sda
+
+################################################################################
+### Finishing up the installation
+################################################################################
+
+d-i finish-install/reboot_in_progress note
+d-i debian-installer/exit/poweroff boolean true
+
+################################################################################
+### X configuration
+################################################################################
+
+# Monitor autodetection is recommended.
+#xserver-xorg xserver-xorg/autodetect_monitor boolean true
+# Uncomment if you have an LCD display.
+##xserver-xorg xserver-xorg/config/monitor/lcd boolean true
+##xserver-xorg xserver-xorg/config/monitor/selection-method select medium
+##xserver-xorg xserver-xorg/config/monitor/mode-list select 1024x768 @ 60 Hz
+
+################################################################################
+### Running custom commands during the installation
+################################################################################
+
+#d-i preseed/late_command string in-target /bin/sh -c 'wget -q -O - https://gitlab.com/morph027/pve-infra-poc/raw/master/contrib/preseed/late-command | bash'

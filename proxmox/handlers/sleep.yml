@@ -1,0 +1,6 @@
+---
+- name: sleep 
+  service:
+    sleep:
+      pause:
+        seconds: 10 

@@ -1,0 +1,58 @@
+---
+# proxmox_kvm options
+api_user: 'root@pam'
+# better use encrypted vault like
+ api_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653236336462626566653063336164663966303231363934653561363964363833313662
+          6431626536303530376336343832656537303632313433360a626438346336353331386135323734
+          62656361653630373231613662633962316233633936396165386439616533353965373339616234
+          3430613539666330390a313736323265656432366236633330313963326365653937323833366536
+          34623731376664623134383463316265643436343438623266623965636363326136
+#api_host: 'pve-test-01'
+api_host: "{{ ansible_host }}"
+defaults:
+  cpu: "kvm64"
+  net: '{"net0":"virtio,bridge=vmbr400"}'
+  sockets: '1'
+  cores: '2'
+  format: 'qcow2'
+  memory_size: '2048'
+  balloon: '0'
+  scsihw: 'virtio-scsi-pci'
+  ostype: 'l26'
+## sshkeys: 'ssh-rsa  AAAAB...ZZZZ'
+  memory:
+    ct: '1024'
+    vm: '2048'
+  onboot: true
+  storage:
+    ct: 'local-lvm'
+    vm: 'vm-shared'
+  virtio: '{"scsi0":"local-lvm:8,cache=writeback,discard=on"}'
+##temporary, than for download
+##  ostemplate: 'local:iso/debian-9.5.0-amd64-netinst.iso' /not supp in VM
+
+deployments:
+  ubuntu:
+    kernel: 'http://ru.archive.ubuntu.com/ubuntu/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64/linux'
+    initrd: 'http://ru.archive.ubuntu.com/ubuntu/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64/initrd.gz'
+    template: 'deploy-args-ubuntu.j2'
+    preseed: 'http://nginxserver.ubuntu/server.seed'
+  debian:
+    kernel: 'http://mirror.mephi.ru/debian/dists/stretch/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux'
+    initrd: 'http://mirror.mephi.ru/debian/dists/stretch/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz'
+    template: 'deploy-args-debian.j2'
+    preseed: 'http://nginxserver/debian/server.seed'
+
+
+cts:
+  pas0:
+    node: 'pve-test-01'
+    memory: '2024'
+    hostname: 'host001'
+    cores: '2'
+    ip_address: '192.168.10.221'
+    netmask: '255.255.255.0'
+    gateway: '192.168.10.130'
+    nameserver: '192.168.10.47'

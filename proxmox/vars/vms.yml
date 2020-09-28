@@ -1,0 +1,29 @@
+vms:  
+   test-01:
+      node: 'mos-pve2'
+      type: 'debian'
+      net: '{"net0":"virtio,bridge=vmbr12"}'
+      sockets: 1
+      cores: 4
+      virtio: '{"scsi0":"ceph-storage:10,discard=on"}'
+      network:
+        ip: '10.77.12.205'
+        netmask: '255.255.255.0'
+        gateway: '10.77.12.1'
+        nameserver: '10.77.12.1'
+        domainname: 'hostname'
+#
+#  k8s-node-01:
+#     node: 'mos-pve2'
+#     type: 'ubuntu'
+#     net: '{"net0":"virtio,bridge=vmbr12"}'
+#     sockets: 2
+#     cores: 4
+#     virtio: '{"scsi0":"ceph-storage:50,discard=on"}'
+#     network:
+#       ip: '10.77.12.132'
+#       netmask: '255.255.255.0'
+#       gateway: '10.77.12.1'
+#       nameserver: '10.77.12.130'
+#       domainname: 'k8s-master'
+

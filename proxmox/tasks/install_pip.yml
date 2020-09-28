@@ -1,0 +1,39 @@
+# install_pip.yml
+---
+- name: 'prep proxmox hosts for automation'
+#  gather_facts: false
+  apt: 
+    update_cache: yes
+    name: ['build-essential']
+    state: present
+
+- name: 'switch to community repos'
+  apt_repository:
+    repo: 'deb https://enterprise.proxmox.com/debian/pve stretch pve-enterprise'
+    state: 'absent'
+  apt_repository:
+    repo: 'deb http://download.proxmox.com/debian/pve stretch pve-no-subscription'
+    state: 'present'
+
+- name: 'Install pip apts'
+  apt: 
+    update_cache: yes
+    name: ['python-apt', 'python-pip', 'python-dev']
+    state: present
+
+- name: 'pip update pip'
+  pip:
+    name: 'pip'
+    state: 'latest'
+
+- name: 'Install dependencies'
+  pip:
+    name: 'virtualenv'
+    state: 'latest'
+# pip:
+    name: 'proxmoxer'
+
+# name: 'Update all apts to the latest version'
+# apt:
+#   upgrade: 'dist'
+#   state: 'latest'
